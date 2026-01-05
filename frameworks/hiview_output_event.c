@@ -422,11 +422,11 @@ int32 EventContentFmt(char *outStr, int32 outStrLen, const uint8 *pEvent)
     sec = time % SECONDS_PER_MINUTE;
     if (event->payload == NULL) {
         len = snprintf_s(outStr, outStrLen, outStrLen - 1,
-            "EVENT: time=%02d:%02d:%02d id=%d type=%d data=null",
+            "EVENT: time=%02u:%02u:%02u id=%u type=%u data=null",
             hour, mte, sec, event->common.eventId, event->type);
     } else {
         len = snprintf_s(outStr, outStrLen, outStrLen - 1,
-            "EVENT: time=%02d:%02d:%02d id=%d type=%d data=%p",
+            "EVENT: time=%02u:%02u:%02u id=%u type=%u data=%p",
             hour, mte, sec, event->common.eventId, event->type, event->payload);
     }
 
