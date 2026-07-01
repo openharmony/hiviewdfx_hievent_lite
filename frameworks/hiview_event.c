@@ -144,7 +144,7 @@ void HiEventReport(HiEvent *event)
         OutputEvent((uint8 *)event);
     }
     HIVIEW_MemFree(MEM_POOL_HIVIEW_ID, event->payload);
-    HIVIEW_MemFree(MEM_POOL_HIVIEW_ID, (void *)event);   
+    HIVIEW_MemFree(MEM_POOL_HIVIEW_ID, (void *)event);
 }
 
 static uint8 HiEventEncode(uint8 k, int32 v, uint8 last, uint8 *encodeOut)
