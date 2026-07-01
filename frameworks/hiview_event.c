@@ -42,7 +42,8 @@ static void HiEventInit(void)
     HIVIEW_UartPrint("hievent will init.\n");
 #ifndef HIEVENT_LITE_MINI
     if (g_hiviewConfig.eventSwitch == HIVIEW_FEATURE_ON && HIEVENT_COMPILE_TYPE > HIEVENT_NONE) {
-        InitCoreEventOutput();      
+        InitCoreEventOutput();
+        HiviewRegisterInitFunc(HIVIEW_CMP_TYPE_EVENT, InitEventOutput);
         HIVIEW_UartPrint("hievent init success.");
     }
 #else
@@ -51,7 +52,7 @@ static void HiEventInit(void)
 }
 CORE_INIT_PRI(HiEventInit, 1);
 
-void HiEventHIVIEW_UartPrint(uint8 type, uint16 eventId, int8 key, int32 value)
+void HiEventPrintf(uint8 type, uint16 eventId, int8 key, int32 value)
 {
 #ifndef HIEVENT_LITE_MINI
     if (g_hiviewConfig.eventSwitch == HIVIEW_FEATURE_OFF) {
