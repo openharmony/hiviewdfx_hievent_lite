@@ -44,7 +44,7 @@ void OutputEvent(const uint8 *data)
     }
     HiEvent *event = (HiEvent *)data;
     char tmpBuffer[LOG_FMT_MAX_LEN] = {0};
-    EventContentFmt(tmpBuffer, LOG_FMT_MAX_LEN, (uint8 *)&event);
+    EventContentFmt(tmpBuffer, LOG_FMT_MAX_LEN, (uint8 *)event);
     HIVIEW_UartPrint(tmpBuffer);
 }
 
