@@ -15,15 +15,15 @@ declare_args() {
   hievent_lite_fault_file_size = 1024
   hievent_lite_ue_file_size = 1024
   hievent_lite_stat_file_size = 1024
-  hievent_lite_cache_size = 256
-  hievent_lite_file_buffer_size = 128
+  hievent_lite_cache_size = 128
+  hievent_lite_file_buffer_size = 64
   hievent_lite_customize_implementation = false
+  hievent_lite_mini = true
 }
 
 static_library("hievent_lite_static") {
   sources = [
-    "frameworks/hiview_event.c",
-    "frameworks/hiview_output_event.c",
+    "frameworks/hiview_event.c"
   ]
   defines = [
     "FAULT_EVENT_FILE_SIZE=$hievent_lite_fault_file_size",
@@ -42,6 +42,12 @@ static_library("hievent_lite_static") {
   ]
   public_configs = [ "//base/hiviewdfx/hiview_lite:hiview_lite_config" ]
   deps = [ "//base/hiviewdfx/hiview_lite" ]
+  if (hievent_lite_mini == true) {
+    sources += ["frameworks/hiview_output_event_mini.c"]
+    defines += ["HIEVENT_LITE_MINI"]  
+  } else {
+    sources += ["frameworks/hiview_output_event.c"]
+  }
 }
 
 group("hievent_lite") {
