@@ -44,6 +44,7 @@ static void HiEventInit(void)
 #ifndef HIEVENT_LITE_MINI
     if (isEventSwitchOn() && HIEVENT_COMPILE_TYPE > HIEVENT_NONE) {
         InitCoreEventOutput();
+        HiviewRegisterInitFunc(HIVIEW_CMP_TYPE_EVENT, InitEventOutput);
         HIVIEW_UartPrint("hievent init success.");
     }
 #else
