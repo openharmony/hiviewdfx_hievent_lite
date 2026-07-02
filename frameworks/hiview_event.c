@@ -43,7 +43,7 @@ static void HiEventInit(void)
     HIVIEW_UartPrint("hievent will init.\n");
 #ifndef HIEVENT_LITE_MINI
     if (isEventSwitchOn() && HIEVENT_COMPILE_TYPE > HIEVENT_NONE) {
-        InitCoreEventOutput();      
+        InitCoreEventOutput();
         HIVIEW_UartPrint("hievent init success.");
     }
 #else
