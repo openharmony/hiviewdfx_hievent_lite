@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,34 +17,22 @@
 #include "securec.h"
 #include "ohos_types.h"
 #include "hiview_def.h"
-#include "hiview_util.h"
-#include "hiview_event.h"
-#include "hiview_cache.h"
-#include "hiview_config.h"
-#include "hiview_log.h"
-#include "hiview_file.h"
-#include "hiview_service.h"
-
-#define EVENT_PAYLOAD_MAX_SIZE   (5 * 16)
 
 static HieventProc g_hieventOutputProc = NULL;
-
-typedef struct OutputEventInfo OutputEventInfo;
-struct OutputEventInfo {
-    HiviewMutexId_t mutex;
-};
-static OutputEventInfo g_outputEventInfo;
-
-#define MAX_RETRY_COUNT 100
 
 void OutputEvent(const uint8 *data)
 {
     if (data == NULL) {
         return;
     }
+
+    if (g_hieventOutputProc != NULL && g_hieventOutputProc((HiEvent *)data) == TRUE) {
+        return;
+    }
+
     HiEvent *event = (HiEvent *)data;
     char tmpBuffer[LOG_FMT_MAX_LEN] = {0};
-    EventContentFmt(tmpBuffer, LOG_FMT_MAX_LEN, (uint8 *)&event);
+    EventContentFmt(tmpBuffer, LOG_FMT_MAX_LEN, (uint8 *)event);
     HIVIEW_UartPrint(tmpBuffer);
 }
 
@@ -53,9 +41,11 @@ int32 EventContentFmt(char *outStr, int32 outStrLen, const uint8 *pEvent)
     if (outStrLen < TAIL_LINE_BREAK) {
         return -1;
     }
+
     if (pEvent == NULL) {
         return -1;
     }
+
     int32 len;
     uint32 time, hour, mte, sec;
     HiEvent *event = (HiEvent *)pEvent;
@@ -64,7 +54,7 @@ int32 EventContentFmt(char *outStr, int32 outStrLen, const uint8 *pEvent)
     hour = time % SECONDS_PER_DAY / SECONDS_PER_HOUR;
     mte = time % SECONDS_PER_HOUR / SECONDS_PER_MINUTE;
     sec = time % SECONDS_PER_MINUTE;
-    if (event->payload == NULL) {
+    if (event->payload == NULL) {;
         len = snprintf_s(outStr, outStrLen, outStrLen - 1,
             "EVENT: time=%02u:%02u:%02u id=%u type=%u data=null",
             hour, mte, sec, event->common.eventId, event->type);
