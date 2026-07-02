@@ -36,13 +36,13 @@
 #define GET_UINT32_BYTE4(v)    (uint8)((((uint32)(v)) & 0xFF000000) >> 24)
 
 static uint8 HiEventEncode(uint8 k, int32 v, uint8 last, uint8 *encodeOut);
-static inline boolean isEventSwitchOn();
+static inline boolean IsEventSwitchOn();
 
 static void HiEventInit(void)
 {
     HIVIEW_UartPrint("hievent will init.\n");
 #ifndef HIEVENT_LITE_MINI
-    if (isEventSwitchOn() && HIEVENT_COMPILE_TYPE > HIEVENT_NONE) {
+    if (IsEventSwitchOn() && HIEVENT_COMPILE_TYPE > HIEVENT_NONE) {
         InitCoreEventOutput();
         HiviewRegisterInitFunc(HIVIEW_CMP_TYPE_EVENT, InitEventOutput);
         HIVIEW_UartPrint("hievent init success.");
@@ -55,7 +55,7 @@ CORE_INIT_PRI(HiEventInit, 1);
 
 void HiEventHIVIEW_UartPrint(uint8 type, uint16 eventId, int8 key, int32 value)
 {
-    if (!isEventSwitchOn()) {
+    if (!IsEventSwitchOn()) {
         return;
     }
     HiEvent e = { 0 };
@@ -77,7 +77,7 @@ void HiEventHIVIEW_UartPrint(uint8 type, uint16 eventId, int8 key, int32 value)
 
 HiEvent *HiEventCreate(uint8 type, uint16 eventId, uint8 num)
 {
-    if (!isEventSwitchOn() || num > EVENT_VALUE_MAX_NUM) {
+    if (!IsEventSwitchOn() || num > EVENT_VALUE_MAX_NUM) {
         return NULL;
     }
     HiEvent *event = (HiEvent *)HIVIEW_MemAlloc(MEM_POOL_HIVIEW_ID, sizeof(HiEvent));
@@ -100,7 +100,7 @@ HiEvent *HiEventCreate(uint8 type, uint16 eventId, uint8 num)
 
 void HiEventPutInteger(HiEvent *event, int8 key, int32 value)
 {
-    if (!isEventSwitchOn() || event == NULL || event->payload == NULL ||
+    if (!IsEventSwitchOn() || event == NULL || event->payload == NULL ||
             key < 0 || event->common.mark == 0) {
             return;
         }
@@ -116,7 +116,7 @@ void HiEventPutInteger(HiEvent *event, int8 key, int32 value)
 
 void HiEventReport(HiEvent *event)
 {
-    if (!isEventSwitchOn() || event == NULL || event->payload == NULL) {
+    if (!IsEventSwitchOn() || event == NULL || event->payload == NULL) {
         return;
     }
     // All data has been added.
@@ -125,7 +125,7 @@ void HiEventReport(HiEvent *event)
         OutputEvent((uint8 *)event);
     }
     HIVIEW_MemFree(MEM_POOL_HIVIEW_ID, event->payload);
-    HIVIEW_MemFree(MEM_POOL_HIVIEW_ID, (void *)event);   
+    HIVIEW_MemFree(MEM_POOL_HIVIEW_ID, (void *)event);
 }
 
 static uint8 HiEventEncode(uint8 k, int32 v, uint8 last, uint8 *encodeOut)
@@ -179,12 +179,12 @@ void HiEventFlush(boolean syncFlag)
 #endif
 }
 
-static inline boolean isEventSwitchOn()
+static inline boolean IsEventSwitchOn()
 {
 #ifdef HIEVENT_LITE_MINI
     return true;
 #else
-    return g_hiviewConfig.eventSwitch == HIVIEW_FEATURE_OFF;
+    return g_hiviewConfig.eventSwitch == HIVIEW_FEATURE_ON;
 #endif
 }
 
