@@ -40,11 +40,15 @@ static uint8 HiEventEncode(uint8 k, int32 v, uint8 last, uint8 *encodeOut);
 static void HiEventInit(void)
 {
     HIVIEW_UartPrint("hievent will init.\n");
+#ifndef HIEVENT_LITE_MINI
     if (g_hiviewConfig.eventSwitch == HIVIEW_FEATURE_ON && HIEVENT_COMPILE_TYPE > HIEVENT_NONE) {
         InitCoreEventOutput();
         HiviewRegisterInitFunc(HIVIEW_CMP_TYPE_EVENT, InitEventOutput);
         HIVIEW_UartPrint("hievent init success.");
     }
+#else
+    HIVIEW_UartPrint("hievent init success.");
+#endif
 }
 CORE_INIT_PRI(HiEventInit, 1);
 
@@ -90,7 +94,6 @@ HiEvent *HiEventCreate(uint8 type, uint16 eventId, uint8 num)
     event->common.time = (uint32)(HIVIEW_GetCurrentTime() / MS_PER_SECOND);
     event->common.len = 0;
     event->type = type;
-
     return event;
 }
 
@@ -100,7 +103,6 @@ void HiEventPutInteger(HiEvent *event, int8 key, int32 value)
         key < 0 || event->common.mark == 0) {
         return;
     }
-
     uint8 encodeLen;
     if (event->common.mark <= 1) {
         encodeLen = HiEventEncode((uint8)key, value, 1, event->payload + event->common.len);
@@ -116,7 +118,6 @@ void HiEventReport(HiEvent *event)
     if (g_hiviewConfig.eventSwitch == HIVIEW_FEATURE_OFF || event == NULL || event->payload == NULL) {
         return;
     }
-
     // All data has been added.
     if (event->common.mark == 0) {
         event->common.mark = EVENT_INFO_HEAD;
@@ -172,7 +173,9 @@ static uint8 HiEventEncode(uint8 k, int32 v, uint8 last, uint8 *encodeOut)
 
 void HiEventFlush(boolean syncFlag)
 {
+#ifndef HIEVENT_LITE_MINI
     FlushEvent(syncFlag);
+#endif
 }
 
 void HiEventRegisterProc(HieventProc func)
