@@ -20,6 +20,18 @@
 
 static HieventProc g_hieventOutputProc = NULL;
 
+void InitCoreEventOutput(void)
+{
+}
+
+void InitEventOutput(void)
+{
+}
+
+void ClearEventOutput(void)
+{
+}
+
 void OutputEvent(const uint8 *data)
 {
     if (data == NULL) {
@@ -47,7 +59,10 @@ int32 EventContentFmt(char *outStr, int32 outStrLen, const uint8 *pEvent)
     }
 
     int32 len;
-    uint32 time, hour, mte, sec;
+    uint32 time;
+    uint32 hour;
+    uint32 mte;
+    uint32 sec;
     HiEvent *event = (HiEvent *)pEvent;
 
     time = event->common.time;
@@ -90,4 +105,31 @@ void HiviewUnRegisterHieventProc(HieventProc func)
     if (g_hieventOutputProc != NULL) {
         g_hieventOutputProc = NULL;
     }
+}
+int HiEventFileProcImp(uint8 type, const char *dest, uint8 mode)
+{
+    (void) type;
+    (void) dest;
+    (void) mode;
+}
+
+void HiviewRegisterHieventFileWatcher(uint8 type, FileProc func, const char *path)
+{
+    (void) type;
+    (void) func;
+    (void) path;
+}
+
+void HiviewUnRegisterHieventFileWatcher(uint8 type, FileProc func)
+{
+    (void) type;
+    (void) func;
+}
+
+void HiEventOutputFileLockImp(void)
+{
+}
+
+void HiEventOutputFileUnLockImp(void)
+{
 }
