@@ -69,7 +69,7 @@ int32 EventContentFmt(char *outStr, int32 outStrLen, const uint8 *pEvent)
     hour = time % SECONDS_PER_DAY / SECONDS_PER_HOUR;
     mte = time % SECONDS_PER_HOUR / SECONDS_PER_MINUTE;
     sec = time % SECONDS_PER_MINUTE;
-    if (event->payload == NULL) {;
+    if (event->payload == NULL) {
         len = snprintf_s(outStr, outStrLen, outStrLen - 1,
             "EVENT: time=%02u:%02u:%02u id=%u type=%u data=null",
             hour, mte, sec, event->common.eventId, event->type);
