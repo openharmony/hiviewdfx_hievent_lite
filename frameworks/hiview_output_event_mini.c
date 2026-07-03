@@ -45,7 +45,7 @@ void OutputEvent(const uint8 *data)
     HiEvent *event = (HiEvent *)data;
     char tmpBuffer[LOG_FMT_MAX_LEN] = {0};
     EventContentFmt(tmpBuffer, LOG_FMT_MAX_LEN, (uint8 *)event);
-    HIVIEW_UartPrint(tmpBuffer);
+    printf(tmpBuffer);
 }
 
 int32 EventContentFmt(char *outStr, int32 outStrLen, const uint8 *pEvent)
@@ -111,6 +111,7 @@ int HiEventFileProcImp(uint8 type, const char *dest, uint8 mode)
     (void) type;
     (void) dest;
     (void) mode;
+    return 0;
 }
 
 void HiviewRegisterHieventFileWatcher(uint8 type, FileProc func, const char *path)
