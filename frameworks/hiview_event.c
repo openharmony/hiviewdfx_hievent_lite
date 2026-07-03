@@ -52,7 +52,7 @@ static void HiEventInit(void)
 }
 CORE_INIT_PRI(HiEventInit, 1);
 
-void HiEventHIVIEW_UartPrint(uint8 type, uint16 eventId, int8 key, int32 value)
+void HiEventPrintf(uint8 type, uint16 eventId, int8 key, int32 value)
 {
     if (g_hiviewConfig.eventSwitch == HIVIEW_FEATURE_OFF) {
         return;
@@ -100,9 +100,9 @@ HiEvent *HiEventCreate(uint8 type, uint16 eventId, uint8 num)
 void HiEventPutInteger(HiEvent *event, int8 key, int32 value)
 {
     if (g_hiviewConfig.eventSwitch == HIVIEW_FEATURE_OFF || event == NULL || event->payload == NULL ||
-            key < 0 || event->common.mark == 0) {
-            return;
-        }
+        key < 0 || event->common.mark == 0) {
+        return;
+    }
     uint8 encodeLen;
     if (event->common.mark <= 1) {
         encodeLen = HiEventEncode((uint8)key, value, 1, event->payload + event->common.len);
