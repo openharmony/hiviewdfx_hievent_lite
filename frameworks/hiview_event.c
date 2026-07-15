@@ -40,11 +40,15 @@ static uint8 HiEventEncode(uint8 k, int32 v, uint8 last, uint8 *encodeOut);
 static void HiEventInit(void)
 {
     HIVIEW_UartPrint("hievent will init.\n");
+#ifndef HIEVENT_LITE_MINI
     if (g_hiviewConfig.eventSwitch == HIVIEW_FEATURE_ON && HIEVENT_COMPILE_TYPE > HIEVENT_NONE) {
         InitCoreEventOutput();
         HiviewRegisterInitFunc(HIVIEW_CMP_TYPE_EVENT, InitEventOutput);
         HIVIEW_UartPrint("hievent init success.");
     }
+#else
+    HIVIEW_UartPrint("hievent init success.");
+#endif
 }
 CORE_INIT_PRI(HiEventInit, 1);
 
@@ -172,7 +176,9 @@ static uint8 HiEventEncode(uint8 k, int32 v, uint8 last, uint8 *encodeOut)
 
 void HiEventFlush(boolean syncFlag)
 {
+#ifndef HIEVENT_LITE_MINI
     FlushEvent(syncFlag);
+#endif
 }
 
 void HiEventRegisterProc(HieventProc func)
